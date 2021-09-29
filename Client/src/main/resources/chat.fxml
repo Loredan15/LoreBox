@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="550.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+    <ListView fx:id="tableView" layoutX="14.0" layoutY="67.0" prefHeight="425.0" prefWidth="301.0" />
+    <TextField fx:id="input" layoutX="14.0" layoutY="492.0" onAction="#send" prefHeight="37.0" prefWidth="301.0" />
+   <Label fx:id="labelTest" layoutX="14.0" layoutY="41.0" prefHeight="25.0" prefWidth="246.0" text="Label" />
+   <Button fx:id="buttonUp" layoutX="259.0" layoutY="39.0" mnemonicParsing="false" onAction="#pathUpAction" prefHeight="25.0" prefWidth="57.0" text="Наверх" />
+   <ListView layoutX="435.0" layoutY="67.0" prefHeight="425.0" prefWidth="301.0" />
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="100.0" layoutY="12.0" prefHeight="17.0" prefWidth="130.0" text="Client">
+      <font>
+         <Font size="14.0" />
+      </font></Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="521.0" layoutY="12.0" prefHeight="17.0" prefWidth="130.0" text="Server">
+      <font>
+         <Font size="14.0" />
+      </font></Label>
+   <Button layoutX="359.0" layoutY="165.0" mnemonicParsing="false" text="&gt;&gt;" />
+   <Button layoutX="359.0" layoutY="208.0" mnemonicParsing="false" text="&lt;&lt;" />
+   <Button layoutX="345.0" layoutY="254.0" mnemonicParsing="false" text="Удалить" />
+   <Button layoutX="324.0" layoutY="295.0" mnemonicParsing="false" text="Переименовать" />
+   <ComboBox fx:id="disks" layoutX="13.0" layoutY="20.0" prefHeight="25.0" prefWidth="60.0" />
+</AnchorPane>

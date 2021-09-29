@@ -1,0 +1,7 @@
+# Project exclude paths
+/client-sep-2021/target/
+/server-sep-2021/target/
+# Project exclude paths
+/Client/target/
+/Core/target/
+/Server/target/
