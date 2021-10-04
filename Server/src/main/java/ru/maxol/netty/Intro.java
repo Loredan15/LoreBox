@@ -1,4 +1,4 @@
-package com.geekbrains.netty;
+package ru.maxol.netty;
 
 public class Intro {
     public static void main(String[] args) {

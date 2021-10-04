@@ -1,4 +1,4 @@
-package com.geekbrains.nio;
+package ru.maxol.nio;
 
 import java.nio.ByteBuffer;
 

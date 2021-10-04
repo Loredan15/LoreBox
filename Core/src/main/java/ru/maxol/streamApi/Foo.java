@@ -1,4 +1,4 @@
-package com.geekbrains.streamApi;
+package ru.maxol.streamApi;
 
 @FunctionalInterface
 public interface Foo {

@@ -1,4 +1,4 @@
-package com.geekbrains;
+package ru.maxol;
 
 public enum CommandType {
     FILE_MESSAGE,
@@ -6,5 +6,7 @@ public enum CommandType {
     LIST_REQUEST,
     LIST_RESPONSE,
     PATH_REQUEST,
-    PATH_RESPONSE
+    PATH_RESPONSE,
+    PATH_IN_REQUEST,
+    PATH_UP_REQUEST
 }

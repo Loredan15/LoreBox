@@ -16,6 +16,8 @@ public class Net {
 
     private final Callback callback;
     private SocketChannel channel;
+    private final String IP_ADDRESS = "localhost";
+    private final Integer PORT = 8189;
 
     public static Net getInstance(Callback callback) {
         if (INSTANCE == null) {
@@ -47,7 +49,7 @@ public class Net {
                             }
                         });
 
-                ChannelFuture future = bootstrap.connect("localhost", 8189).sync();
+                ChannelFuture future = bootstrap.connect(IP_ADDRESS, PORT).sync();
                 log.debug("Client connected");
                 future.channel().closeFuture().sync(); // block
             } catch (Exception e) {

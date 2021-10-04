@@ -1,4 +1,4 @@
-package com.geekbrains.netty;
+package ru.maxol.netty;
 
 import java.nio.charset.StandardCharsets;
 

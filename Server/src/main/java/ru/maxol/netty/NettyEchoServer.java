@@ -1,4 +1,4 @@
-package com.geekbrains.netty;
+package ru.maxol.netty;
 
 import java.util.logging.FileHandler;
 
@@ -38,7 +38,7 @@ public class NettyEchoServer {
                                     // todo
                                     new StringDecoder(),
                                     new StringEncoder(),
-                                    new EchoHandler()
+                                    new FileMessageHandler()
                             );
                         }
                     })

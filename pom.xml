@@ -9,9 +9,9 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>server-sep-2021</module>
-        <module>client-sep-2021</module>
-        <module>core-sep-2021</module>
+        <module>Server</module>
+        <module>Client</module>
+        <module>Core</module>
     </modules>
 
     <properties>

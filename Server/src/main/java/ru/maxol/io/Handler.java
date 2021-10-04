@@ -1,4 +1,4 @@
-package com.geekbrains.io;
+package ru.maxol.io;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

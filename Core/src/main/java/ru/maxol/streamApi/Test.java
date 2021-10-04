@@ -1,4 +1,4 @@
-package com.geekbrains.streamApi;
+package ru.maxol.streamApi;
 
 import java.io.IOException;
 import java.nio.file.Files;

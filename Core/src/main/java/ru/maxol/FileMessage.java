@@ -1,4 +1,4 @@
-package com.geekbrains;
+package ru.maxol;
 
 import java.io.IOException;
 import java.io.Serializable;
