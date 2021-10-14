@@ -1,7 +1,6 @@
-package ru.maxol;
+package ru.maxol.command;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
