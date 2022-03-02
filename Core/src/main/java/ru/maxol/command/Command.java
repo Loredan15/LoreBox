@@ -1,4 +1,4 @@
-package ru.maxol;
+package ru.maxol.command;
 
 import java.io.Serializable;
 

@@ -1,3 +1,13 @@
+import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
+import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import ru.maxol.command.*;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
@@ -7,25 +17,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
-import ru.maxol.*;
-import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
-import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
 public class Controller implements Initializable {
 
-    private static String ROOT_DIR = "client-sep-2021/root";
-    private static String ROOT_C = "C:";
-    private static byte[] buffer = new byte[1024];
+    private static final String CLIENT_ROOT_DIR = "client/root";
+    private static final String SERVER_ROOT_DIR = "server/root";
+    private static final String ROOT_C = "C:\\";
+    private static final byte[] buffer = new byte[1024];
     public ListView<String> clientView;
     public ListView<String> serverView;
     public Label pathLabelClient;
@@ -35,16 +36,14 @@ public class Controller implements Initializable {
     public Button buttonUpServer;
     private ObjectDecoderInputStream is;
     private ObjectEncoderOutputStream os;
-    private Net net;
     private Path currentDir;
 
+    @SneakyThrows
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        net = Net.getInstance(s -> Platform.runLater(() -> clientView.getItems().add(s)));
         Path file = Paths.get(ROOT_C);
-        currentDir = Paths.get("client", "root");
+        currentDir = Paths.get(ROOT_C);
         pathLabelClient.setText(file.normalize().toAbsolutePath().toString());
-//        localPath.setText(file.normalize().toAbsolutePath().toString());
 
         disks.getItems().clear();
         for (Path p : FileSystems.getDefault().getRootDirectories()) {
@@ -52,8 +51,11 @@ public class Controller implements Initializable {
         }
         disks.getSelectionModel().select(0);
 
+        updateClientView();
+        selectListeners();
+
         try {
-            fillFilesInCurrentDir();
+//            fillFilesInCurrentDir();
             Socket socket = new Socket("localhost", 8189);
             os = new ObjectEncoderOutputStream(socket.getOutputStream());
             is = new ObjectDecoderInputStream(socket.getInputStream());
@@ -116,13 +118,12 @@ public class Controller implements Initializable {
 
         serverView.getItems().clear();
         serverView.getItems().addAll(
-                Files.list(Paths.get(ROOT_DIR)).map(p -> p.getFileName().toString()).collect(Collectors.toList()));
+                Files.list(Paths.get(CLIENT_ROOT_DIR)).map(p -> p.getFileName().toString()).collect(Collectors.toList()));
 
     }
 
     public void updateList(Path path) {
         try {
-            clientView.getItems().clear();
             pathLabelClient.setText(path.normalize().toAbsolutePath().toString());
             clientView.getItems().clear();
             clientView.getItems().addAll(
@@ -134,6 +135,50 @@ public class Controller implements Initializable {
             Alert alert = new Alert(Alert.AlertType.WARNING, "По какой-то причине не удалось обновить список файлов", ButtonType.OK);
             alert.showAndWait();
         }
+    }
+
+    private void selectListeners() {
+        clientView.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                String item = clientView.getSelectionModel().getSelectedItem();
+                Path newPath = currentDir.resolve(item);
+                if (Files.isDirectory(newPath)) {
+                    currentDir = newPath;
+                    try {
+                        updateClientView();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        serverView.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                String item = serverView.getSelectionModel().getSelectedItem();
+                try {
+                    os.writeObject(new PathInRequest(item));
+                    os.flush();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void selectDiskAction(ActionEvent actionEvent) throws IOException {
+        ComboBox<String> element = (ComboBox<String>) actionEvent.getSource();
+        pathLabelClient.setText(currentDir.toString());
+        Path path = Paths.get(element.getSelectionModel().getSelectedItem());
+        currentDir = path;
+        pathLabelClient.setText(path.normalize().toAbsolutePath().toString());
+        List<String> names = Files.list(currentDir)
+                .map(p -> p.getFileName().toString())
+                .collect(Collectors.toList());
+        Platform.runLater(() -> {
+            clientView.getItems().clear();
+            clientView.getItems().addAll(names);
+        });
     }
 
     private void updateClientView() throws IOException {
@@ -174,14 +219,30 @@ public class Controller implements Initializable {
         os.flush();
     }
 
-//    public void clientPathUp(ActionEvent actionEvent) throws IOException {
-//        currentDir = currentDir.getParent();
-//        clientPath.setText(currentDir.toString());
-//        refreshClientView();
-//    }
+    public void clientPathUp(ActionEvent actionEvent) throws IOException {
+        //todo Решить проблему с корнем диска
+        currentDir = currentDir.getParent();
+        if(currentDir != null) {
+            pathLabelClient.setText(currentDir.toString());
+            updateClientView();
+        }
+    }
 
     public void serverPathUp(ActionEvent actionEvent) throws IOException {
         os.writeObject(new PathUpRequest());
         os.flush();
     }
-}
+
+    public void deleteFile(ActionEvent actionEvent) throws IOException {
+        String fileName = clientView.getSelectionModel().getSelectedItem();
+        Files.delete(currentDir.resolve(fileName));
+        updateClientView();
+    }
+
+    public void renameFile(ActionEvent actionEvent) throws IOException {
+
+
+        }
+    }
+
+

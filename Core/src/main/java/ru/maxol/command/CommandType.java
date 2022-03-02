@@ -1,4 +1,4 @@
-package ru.maxol;
+package ru.maxol.command;
 
 public enum CommandType {
     FILE_MESSAGE,

@@ -1,21 +1,21 @@
-package ru.maxol.netty;
+package ru.maxol.server;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import ru.maxol.*;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
+import ru.maxol.command.*;
 
 @Slf4j
 public class FileMessageHandler extends SimpleChannelInboundHandler<Command> {
     private static Path currentPath;
 
     public FileMessageHandler() throws IOException {
-        currentPath = Paths.get("server", "root");
+        currentPath = Paths.get("Server", "root");
         if (!Files.exists(currentPath)) {
             Files.createDirectory(currentPath);
         }
